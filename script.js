@@ -9,85 +9,104 @@
 //          - once hit - remove (1)(2)(3) [Is it removeItem(1, 2, 3 siblings) or clear()] -- Is it display: none?
 //-------------------------------------------
 
-//step 1:
-//grab input value
-var newTask = document.getElementById("inputEntered"); //input
+const log = console.log
 
-//grab div
-var maindiv = document.getElementById('maindiv');
-
-//create ul
-var ul = document.createElement('ul');
-ul.id = 'taskList';
-
-//create li = <li></li>
-var li = document.createElement('li');
-li.className = 'setWidth'
-
-//create button = <button></button>
-var button = document.createElement('button');
-button.id = 'cancel';
-button.className = 'rightAlign';
-
-//create label = <label>
-var label = document.createElement('label');
-
-//create checkbox = <input type='checkbox'>
-var checkbox = document.createElement('input'); 
-checkbox.setAttribute("type", "checkbox");
-checkbox.setAttribute("name", "checked");
-
-//function addtask with input
 function addTask(event) {
-  //assign value to <li> input value </li>
-  label.textContent = event.target.value
-  keycode = event.key;
+  
+  var keycode = event.key;
+
   if (keycode === 'Enter') {
-    // event.preventDefault(); 
-    maindiv.appendChild(ul);
+    //grab div
+    var maindiv = document.getElementById("maindiv");
+    //add border
+    maindiv.style.border = '1px solid black';
+
+    //grab ul
+    var ul = document.getElementById("taskList");
+
+    //create li = <li></li>
+    var li = document.createElement('li');
+    li.className = 'liStyling';
     ul.appendChild(li);
-    event.target.value = '';
+    
+    //create checkbox = <input type='checkbox'>
+    var checkbox = document.createElement('input'); 
+    checkbox.setAttribute("type", "checkbox");
+    checkbox.setAttribute("name", "checked");
+    checkbox.className = 'clearTask';
     li.appendChild(checkbox);
+
+    //create label = <label>
+    var label = document.createElement('label');
+    label.textContent = event.target.value;
+    label.className = 'labelStyling';
     li.appendChild(label);
-    li.appendChild(button);
-    button.appendChild(document.createTextNode('x'))
-    console.log(maindiv.innerHTML)
-    console.log(maindiv.lastChild);
+
+    //create button = <button></button>
+    var deletebtn = document.createElement('button');
+    deletebtn.id = 'deleteTask';
+    deletebtn.className = 'rightAlign deleteTask';
+    li.appendChild(deletebtn);
+    deletebtn.appendChild(document.createTextNode('x'))
+
+
+    log(deletebtn.parentElement);
+    log(deletebtn.parentElement.parentElement);
+    event.target.value = '';
   } 
 }
 
+//grab input
+var newTask = document.getElementById("inputEntered"); 
+
 newTask.addEventListener('keypress', addTask);
+//------------------------------------------
 
-// to add class/id/attr to li: .className/.id = '';
-// .setAttribute('title', 'Hello li');
+//why i can't target button? - do i need to store btn? // how to store data to local storage?
+// function deleteTask(e) {
+//   log(e.parentElement);
+//   log(e.target);
+// }
 
-// console.log(storeValue);
+// var deletebtn = document.getElementById("deleteTask");
 
-// I need to store this input obj (<li> input value </li>) in local storage
+// deletebtn.addEventListener('click', deleteTask);
 
-//------------------------------------
+//---------------------------------------------------
 
+function deleteTask(e) {
+  if (e.target.classList.contains('deleteTask')) {
+    if (e.target.parentElement.nextSibling === null) {
+      e.target.parentElement.remove();
+      var maindiv = document.getElementById("maindiv");
+      maindiv.style.border = 'none';
+    } else {
+      e.target.parentElement.remove();
+    };
+  }
+};
 
-//Second try
+var taskList = document.getElementById("taskList");
 
+taskList.addEventListener('click', deleteTask);
 
-// taskValue.addEventListener('keypress', function (e) {
-//     var char = e.char || e.charCode || e.which;
-//     var character = String.fromCharCode(char)
-//     var key = e.key;
-//     var log = console.log;
-//     var inputChar = '';
-//     log(char);
-//     log(character);
-//     log(typeof(key));
-//     if (char !== 13) {
-//         inputChar.concat(key);
+//---------------------------------------------------
 
-//         log(inputChar.concat(key));
-//     } else {
-//         return inputChar;
-//     }
-// });
+function clearTask(e) {
+  var checkbox = e.target;
+  var labelSibling = e.target.nextSibling;
+  // log(e.target);
+  // log(e.target.nextSibling);
+  if (checkbox.checked) {
+    labelSibling.style.textDecoration = 'line-through';
+  } else {
+    labelSibling.style.textDecoration = 'none';
+  };
+};
+
+taskList.addEventListener('change', clearTask);
+
+//---------------------------------------------------
 
 
 //resource
@@ -98,53 +117,5 @@ newTask.addEventListener('keypress', addTask);
 
 
 
-
-//------------------------------------------------------
-// get the value when keypress event is triggered.
-// Question is how?
-//function addtask with enter key
-
-
-//Third try
-
-// taskValue.addEventListener("keypress", addTask)
-
-// function addTask(event) {
-//   var keycode = event.code
-//   if (keycode === 'Enter') {
-//     newTask.textContent = event.target.value;
-//     taskList.appendChild(newTask);
-//   } else {
-//     console.log('not working');
-//   }
-// }
-
-// var keycode = event.code
-// if (keycode === 'Enter') {
-//   document.getElementById("output").appendChild(el)
-// }
-
-
-
-
-
-//resource: //https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code
-//https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
-//https://stackoverflow.com/questions/4471582/keycode-vs-which
-
-//-------------------------------------------------------
-// Test input to see if it works -----------------------
-//assign value to li = <li>value</li>
-//newTask.textContent = taskValue
-// var input = document.getElementById("inputEntered");
-
-// var targetDisplay = document.getElementById('demo');
-
-// input.addEventListener('input', addtoDemo);
-
-// function addtoDemo(ev) {
-//   targetDisplay.textContent = ev.target.value;
-//   console.log(ev.target)
-// }
 
 

@@ -31,8 +31,16 @@ ul {
     display: flex;
   }
 
-.setWidth {
+.liStyling {
     width: 250px;
     margin: 0 auto;
 }
 
+.labelStyling {
+  width: 200px;
+  text-align: left;
+}
+
+.removeLineThrough {
+  text-decoration: none;
+}
