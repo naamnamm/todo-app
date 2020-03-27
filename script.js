@@ -12,10 +12,8 @@
 const log = console.log
 
 function addTask(event) {
-  
   var keycode = event.key;
-
-  if (keycode === 'Enter') {
+  if (keycode === 'Enter' && event.target.value.length > 1) {
     //grab div
     var maindiv = document.getElementById("maindiv");
     //add border
@@ -27,6 +25,7 @@ function addTask(event) {
     //create li = <li></li>
     var li = document.createElement('li');
     li.className = 'liStyling';
+    li.id = 'liListing';
     ul.appendChild(li);
     
     //create checkbox = <input type='checkbox'>
@@ -49,45 +48,99 @@ function addTask(event) {
     li.appendChild(deletebtn);
     deletebtn.appendChild(document.createTextNode('x'))
 
+    //get update list every time new task added
+    let tasks = JSON.parse(localStorage.getItem('taskListing')) || [];
 
-    log(deletebtn.parentElement);
-    log(deletebtn.parentElement.parentElement);
+    tasks.push(event.target.value);
+     
+    //save or update tasks to local storage
+    localStorage.setItem('taskListing', JSON.stringify(tasks));
+    
+    // saved is now an object. // saved is just to see what's saved on local storage.
+    let saved = JSON.parse(JSON.stringify(tasks));
+
+    //once entered - set input value to 0
     event.target.value = '';
-  } 
+  }
 }
 
 //grab input
 var newTask = document.getElementById("inputEntered"); 
-
+//add event listener
 newTask.addEventListener('keypress', addTask);
+
+//-----------------------------------------------
+
+const saved = JSON.parse(localStorage.getItem('taskListing'));
+log(saved);
+
+saved.forEach(addLiToSavedObj);
+
+function addLiToSavedObj(task) {
+  if (saved.length >= 1) {
+    //grab maindiv
+    var maindiv = document.getElementById("maindiv");
+    //add border
+    maindiv.style.border = '1px solid black';
+
+    //grab ul
+    var ul = document.getElementById("taskList");
+
+    //create li = <li></li>
+    var li = document.createElement('li');
+    li.className = 'liStyling';
+    li.id = 'liListing';
+    ul.appendChild(li);
+    
+    //create checkbox = <input type='checkbox'>
+    var checkbox = document.createElement('input'); 
+    checkbox.setAttribute("type", "checkbox");
+    checkbox.setAttribute("name", "checked");
+    checkbox.className = 'clearTask';
+    li.appendChild(checkbox);
+
+    //create label = <label>
+    var label = document.createElement('label');
+    label.textContent = task;
+    label.className = 'labelStyling';
+    li.appendChild(label);
+
+    //create button = <button></button>
+    var deletebtn = document.createElement('button');
+    deletebtn.id = 'deleteTask';
+    deletebtn.className = 'rightAlign deleteTask';
+    li.appendChild(deletebtn);
+    deletebtn.appendChild(document.createTextNode('x'))
+
+    console.log(task);
+  }
+}
+
 //------------------------------------------
-
-//why i can't target button? - do i need to store btn? // how to store data to local storage?
-// function deleteTask(e) {
-//   log(e.parentElement);
-//   log(e.target);
-// }
-
-// var deletebtn = document.getElementById("deleteTask");
-
-// deletebtn.addEventListener('click', deleteTask);
-
-//---------------------------------------------------
 
 function deleteTask(e) {
   if (e.target.classList.contains('deleteTask')) {
-    if (e.target.parentElement.nextSibling === null) {
+    if (e.target.parentElement.nextSibling === null && e.target.parentElement.previousSibling === null ) {
       e.target.parentElement.remove();
       var maindiv = document.getElementById("maindiv");
       maindiv.style.border = 'none';
     } else {
       e.target.parentElement.remove();
     };
+    
+    //grab saved array
+    const saved = JSON.parse(localStorage.getItem('taskListing'));
+    
+    //remove item from saved array
+    let updateTask = saved.filter(item => item !== e.target.parentElement.firstElementChild.nextElementSibling.innerHTML); 
+
+    //save update
+    localStorage.setItem('taskListing', JSON.stringify(updateTask));
   }
 };
 
+// add event listener to remove action
 var taskList = document.getElementById("taskList");
-
 taskList.addEventListener('click', deleteTask);
 
 //---------------------------------------------------
@@ -105,6 +158,19 @@ function clearTask(e) {
 };
 
 taskList.addEventListener('change', clearTask);
+
+//---------------------------------------------------
+
+//to figure out 
+//with delete task fx why can't I target button?
+// function deleteTask(e) {
+//   log(e.parentElement);
+//   log(e.target);
+// }
+
+// var deletebtn = document.getElementById("deleteTask");
+
+// deletebtn.addEventListener('click', deleteTask);
 
 //---------------------------------------------------
 
