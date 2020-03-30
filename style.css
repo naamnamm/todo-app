@@ -1,39 +1,39 @@
 body {
-    background-color: #f7f7f7;
-  }
+  background-color: #f7f7f7;
+}
   
 .inputTasks,
 .header, .todoListBoard  {
-    width: 300px;
-  }
-  
-  .centered {
-    margin: 20px auto;
-    text-align: center;
-  }
-  
-  .border {
-    border: 1px solid black;
-  }
-  
-  #inputEntered {
-    width: 250px;
-    height: 50px;
-    font-size: 20px;
-  }
-
-ul {
-    padding: 0;
+  width: 300px;
 }
 
- li {
-    list-style: none;
-    display: flex;
-  }
+.centered {
+  margin: 20px auto;
+  text-align: center;
+}
+  
+.border {
+  border: 1px solid black;
+}
+  
+#inputEntered {
+  width: 250px;
+  height: 50px;
+  font-size: 20px;
+}
+
+ul {
+  padding: 0;
+}
+
+li {
+  list-style: none;
+  display: flex;
+}
 
 .liStyling {
-    width: 250px;
-    margin: 0 auto;
+  width: 250px;
+  margin: 0 auto;
 }
 
 .labelStyling {

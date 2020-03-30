@@ -1,19 +1,8 @@
-// function 1
-// target element ul -
-// triggered action: a)input + b) enter
-//- action:create li with 3 elements (1)(2)(3) - to be stored in LocalStorage [setItem()]
-//      (1) input for check box - when user complete task
-//          - when you check the box - cross out (2) [getItem(sibling(2) > cross out)]
-//      (2) label/span for task entered. ex. cooking
-//      (3) button for deleting to-do task
-//          - once hit - remove (1)(2)(3) [Is it removeItem(1, 2, 3 siblings) or clear()] -- Is it display: none?
-//-------------------------------------------
-
 const log = console.log
 
-function addTask(event) {
-  var keycode = event.key;
-  if (keycode === 'Enter' && event.target.value.length > 1) {
+function addTask(e) {
+  var keycode = e.key;
+  if (keycode === 'Enter' && e.target.value.length > 1) {
     //grab div
     var maindiv = document.getElementById("maindiv");
     //add border
@@ -37,7 +26,7 @@ function addTask(event) {
 
     //create label = <label>
     var label = document.createElement('label');
-    label.textContent = event.target.value;
+    label.textContent = e.target.value;
     label.className = 'labelStyling';
     li.appendChild(label);
 
@@ -51,7 +40,12 @@ function addTask(event) {
     //get update list every time new task added
     let tasks = JSON.parse(localStorage.getItem('taskListing')) || [];
 
-    tasks.push(event.target.value);
+    const task = {
+      text: e.target.value,
+      isCompleted: false
+    }
+
+    tasks.push(task);
      
     //save or update tasks to local storage
     localStorage.setItem('taskListing', JSON.stringify(tasks));
@@ -59,8 +53,8 @@ function addTask(event) {
     // saved is now an object. // saved is just to see what's saved on local storage.
     let saved = JSON.parse(JSON.stringify(tasks));
 
-    //once entered - set input value to 0
-    event.target.value = '';
+    //once entered - set input value to ''
+    e.target.value = '';
   }
 }
 
@@ -74,9 +68,10 @@ newTask.addEventListener('keypress', addTask);
 const saved = JSON.parse(localStorage.getItem('taskListing'));
 log(saved);
 
-saved.forEach(addLiToSavedObj);
+saved.forEach(addLiToSavedTask);
 
-function addLiToSavedObj(task) {
+//task is now an object
+function addLiToSavedTask(task) {
   if (saved.length >= 1) {
     //grab maindiv
     var maindiv = document.getElementById("maindiv");
@@ -98,13 +93,15 @@ function addLiToSavedObj(task) {
     checkbox.setAttribute("name", "checked");
     checkbox.className = 'clearTask';
     li.appendChild(checkbox);
+    //everytime the above checkbox is fired - look up and change iscompleted to True
 
     //create label = <label>
     var label = document.createElement('label');
-    label.textContent = task;
+
+    label.textContent = task.text;
     label.className = 'labelStyling';
     li.appendChild(label);
-
+    //task is now an object
     //create button = <button></button>
     var deletebtn = document.createElement('button');
     deletebtn.id = 'deleteTask';
@@ -132,7 +129,7 @@ function deleteTask(e) {
     const saved = JSON.parse(localStorage.getItem('taskListing'));
     
     //remove item from saved array
-    let updateTask = saved.filter(item => item !== e.target.parentElement.firstElementChild.nextElementSibling.innerHTML); 
+    let updateTask = saved.filter(item => item.text !== e.target.parentElement.firstElementChild.nextElementSibling.innerHTML); 
 
     //save update
     localStorage.setItem('taskListing', JSON.stringify(updateTask));
@@ -155,9 +152,95 @@ function clearTask(e) {
   } else {
     labelSibling.style.textDecoration = 'none';
   };
-};
+  
+  const saved = JSON.parse(localStorage.getItem('taskListing'));
+
+  for (let i=0; i < saved.length; i++ ) {
+    if (checkbox.checked) {
+      if (saved[i].text === checkbox.nextSibling.textContent) {
+        saved[i].isCompleted = true;
+      } 
+    } else {
+      saved[i].isCompleted = false;
+    }
+    
+    localStorage.setItem('taskListing', JSON.stringify(saved));
+  }
+}
 
 taskList.addEventListener('change', clearTask);
+
+//--------------------------------------------------
+
+//add strikethrough to saved object
+let label = [...document.getElementsByClassName('labelStyling')];
+log(label);
+log(typeof(label));
+log(label.innerHTML);
+
+label.forEach(addStrikeThrough);
+
+function addStrikeThrough(task) {
+  let updateList = JSON.parse(localStorage.getItem('taskListing'))
+  for (i=0; i<updateList.length; i++) {
+    if (updateList[i].isCompleted == true && task.innerText === updateList[i].text) {
+      task.style.textDecoration = 'line-through';
+    } 
+  }
+}
+//--------------------------------------------------
+
+
+
+
+
+// //if update[i].
+// function addStrikeThroughToSaveItems(task) {
+//   let label = document.getElementsByClassName('labelStyling');
+//   if (task.isCompleted == true) {
+//     label.style.textDecoration = 'line-through';
+//   } else {
+//     label.style.textDecoration = 'none';
+//   }
+// }
+
+//loop through label 
+
+
+  // let updateSaved = JSON.parse(localStorage.getItem('taskListing'))
+  // if (updateSaved.isCompleted == true) {
+  //   labelSibling.style.textDecoration = 'line-through';
+  // } else {
+  //   labelSibling.style.textDecoration = 'none';
+  // };
+  
+      //log(saved[i]);
+    
+    //***splice position i > replace with save[i]
+    // log(saved[i]);
+  
+    // log(saved);
+    // localStorage.setItem('taskListing', JSON.stringify(saved));
+  // let tasks = JSON.parse(localStorage.getItem('taskListing')) || [];
+
+  // get all todo items from local storage
+  // search and find the item in local storage
+  // update the item's isCompleted property
+  // save the update item in local storage
+
+
+
+
+
+
+
+// const updateStrikeThrough = JSON.parse(localStorage.getItem('taskListing'));
+// var labelSibling = e.target.nextSibling;
+// if (saved.isCompleted == true) {
+//   labelSibling.style.textDecoration = 'line-through';
+// } else {
+//   labelSibling.style.textDecoration = 'none';
+// };
 
 //---------------------------------------------------
 
@@ -173,11 +256,6 @@ taskList.addEventListener('change', clearTask);
 // deletebtn.addEventListener('click', deleteTask);
 
 //---------------------------------------------------
-
-
-//resource
-//https://dzone.com/articles/back-basics-%E2%80%93-using-keyboard
-//https://www.youtube.com/watch?v=5-koI06rmcA
 
 
 
