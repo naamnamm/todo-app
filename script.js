@@ -12,14 +12,13 @@ function addTask(e) {
     //create li = <li></li>
     let li = document.createElement('li');
     li.className = 'li-styling';
-    li.id = 'liListing';
     ul.appendChild(li);
     
     //create checkbox = <input type='checkbox'>
     let checkbox = document.createElement('input'); 
     checkbox.setAttribute("type", "checkbox");
     checkbox.setAttribute("name", "checked");
-    checkbox.className = 'clearTask';
+    checkbox.className = 'clear-task';
     li.appendChild(checkbox);
 
     //create label = <label>
@@ -30,13 +29,12 @@ function addTask(e) {
 
     //create button = <button></button>
     let deletebtn = document.createElement('button');
-    deletebtn.id = 'deleteTask';
-    deletebtn.className = 'rightAlign deleteTask';
+    deletebtn.className = 'delete-task';
     li.appendChild(deletebtn);
     deletebtn.appendChild(document.createTextNode('x'))
 
     //get update list every time new task added
-    let tasks = JSON.parse(localStorage.getItem('taskListing')) || [];
+    let tasks = JSON.parse(localStorage.getItem('task-listing')) || [];
 
     const task = {
       text: e.target.value,
@@ -46,7 +44,7 @@ function addTask(e) {
     tasks.push(task);
      
     //save or update tasks to local storage
-    localStorage.setItem('taskListing', JSON.stringify(tasks));
+    localStorage.setItem('task-listing', JSON.stringify(tasks));
     
     // saved is now an object. // saved is just to see what's saved on local storage.
     let saved = JSON.parse(JSON.stringify(tasks));
@@ -59,7 +57,7 @@ function addTask(e) {
 let newTask = document.getElementById("input-entered"); 
 newTask.addEventListener('keypress', addTask);
 
-const saved = JSON.parse(localStorage.getItem('taskListing'));
+const saved = JSON.parse(localStorage.getItem('task-listing'));
 saved.forEach(addLiToSavedTask);
 
 function addLiToSavedTask(task) {
@@ -74,7 +72,6 @@ function addLiToSavedTask(task) {
     //create li = <li>
     let li = document.createElement('li');
     li.className = 'li-styling';
-    li.id = 'liListing';
     ul.appendChild(li);
     
     //create checkbox = <input type='checkbox'>
@@ -96,15 +93,14 @@ function addLiToSavedTask(task) {
 
     //create button = <button></button>
     let deletebtn = document.createElement('button');
-    deletebtn.id = 'deleteTask';
-    deletebtn.className = 'rightAlign deleteTask';
+    deletebtn.className = 'delete-task';
     li.appendChild(deletebtn);
     deletebtn.appendChild(document.createTextNode('x'))
   }
 }
 
 function deleteTask(e) {
-  if (e.target.classList.contains('deleteTask')) {
+  if (e.target.classList.contains('delete-task')) {
     if (e.target.parentElement.nextSibling === null && e.target.parentElement.previousSibling === null ) {
       e.target.parentElement.remove();
       let maindiv = document.getElementById("main-div");
@@ -114,13 +110,13 @@ function deleteTask(e) {
     };
     
     //grab saved array
-    const saved = JSON.parse(localStorage.getItem('taskListing'));
+    const saved = JSON.parse(localStorage.getItem('task-listing'));
     
     //remove item from saved array
     let updateTask = saved.filter(item => item.text !== e.target.parentElement.firstElementChild.nextElementSibling.innerHTML); 
 
     //save update
-    localStorage.setItem('taskListing', JSON.stringify(updateTask));
+    localStorage.setItem('task-listing', JSON.stringify(updateTask));
   }
 };
 
@@ -136,13 +132,13 @@ function clearTask(e) {
     labelSibling.style.textDecoration = 'none';
   };
   
-  const saved = JSON.parse(localStorage.getItem('taskListing'));
+  const saved = JSON.parse(localStorage.getItem('task-listing'));
 
   for (let i=0; i < saved.length; i++ ) {
       if (saved[i].text === checkbox.nextSibling.textContent) {
         saved[i].isCompleted = checkbox.checked;
       } 
-    localStorage.setItem('taskListing', JSON.stringify(saved));
+    localStorage.setItem('task-listing', JSON.stringify(saved));
   }
 }
 
