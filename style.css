@@ -1,9 +1,9 @@
 body {
-  background-color: white;
+  background-color: #f7f7f7;
 }
 
-.inputTasks,
-.header, .todoListBoard  {
+.input-wrapper,
+.header, .todo-list-board  {
   width: 300px;
 }
 
@@ -16,9 +16,10 @@ body {
   text-align: center;
 }
 
-.inputTasks {
+.input-wrapper {
   margin: 0 auto;
   text-align: center;
+  background-color: white;
 }
 
 
@@ -37,12 +38,12 @@ body {
   border: 1px solid #dedcdc;
 }
 
-.todoListBoard {
+.todo-list-board {
   margin: 0 auto;
   text-align: center;
 }
 
-#inputEntered {
+#input-entered {
   width: 250px;
   height: 50px;
   font-size: 20px;
@@ -57,13 +58,13 @@ li {
   display: flex;
 }
 
-.liStyling {
+.li-styling {
   width: 250px;
   margin: 0 auto;
   padding: 5px 0;
 }
 
-.labelStyling {
+.label-styling {
   width: 200px;
   text-align: left;
   padding-left: 5px;

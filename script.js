@@ -2,16 +2,16 @@ function addTask(e) {
   let keycode = e.key;
   if (keycode === 'Enter' && e.target.value.length > 1) {
     //grab div
-    let maindiv = document.getElementById("maindiv");
+    let maindiv = document.getElementById("main-div");
     //add border
     maindiv.style.border = '1px solid #dedcdc';
 
     //grab ul
-    let ul = document.getElementById("taskList");
+    let ul = document.getElementById("task-list");
 
     //create li = <li></li>
     let li = document.createElement('li');
-    li.className = 'liStyling';
+    li.className = 'li-styling';
     li.id = 'liListing';
     ul.appendChild(li);
     
@@ -25,7 +25,7 @@ function addTask(e) {
     //create label = <label>
     let label = document.createElement('label');
     label.textContent = e.target.value;
-    label.className = 'labelStyling';
+    label.className = 'label-styling';
     li.appendChild(label);
 
     //create button = <button></button>
@@ -56,7 +56,7 @@ function addTask(e) {
   }
 }
 
-let newTask = document.getElementById("inputEntered"); 
+let newTask = document.getElementById("input-entered"); 
 newTask.addEventListener('keypress', addTask);
 
 const saved = JSON.parse(localStorage.getItem('taskListing'));
@@ -65,15 +65,15 @@ saved.forEach(addLiToSavedTask);
 function addLiToSavedTask(task) {
   if (saved.length >= 1) {
     //grab maindiv
-    let maindiv = document.getElementById("maindiv");
+    let maindiv = document.getElementById("main-div");
     maindiv.style.border = '1px solid #dedcdc';
 
     //grab ul
-    let ul = document.getElementById("taskList");
+    let ul = document.getElementById("task-list");
 
     //create li = <li>
     let li = document.createElement('li');
-    li.className = 'liStyling';
+    li.className = 'li-styling';
     li.id = 'liListing';
     ul.appendChild(li);
     
@@ -88,7 +88,7 @@ function addLiToSavedTask(task) {
     //create label = <label>
     let label = document.createElement('label');
     label.textContent = task.text;
-    label.className = 'labelStyling';
+    label.className = 'label-styling';
     li.appendChild(label);
     if (task.isCompleted == true) {
       label.style.textDecoration = 'line-through';
@@ -107,7 +107,7 @@ function deleteTask(e) {
   if (e.target.classList.contains('deleteTask')) {
     if (e.target.parentElement.nextSibling === null && e.target.parentElement.previousSibling === null ) {
       e.target.parentElement.remove();
-      let maindiv = document.getElementById("maindiv");
+      let maindiv = document.getElementById("main-div");
       maindiv.style.border = 'none';
     } else {
       e.target.parentElement.remove();
@@ -124,7 +124,7 @@ function deleteTask(e) {
   }
 };
 
-let taskList = document.getElementById("taskList");
+let taskList = document.getElementById("task-list");
 taskList.addEventListener('click', deleteTask);
 
 function clearTask(e) {
