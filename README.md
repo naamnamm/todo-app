@@ -1,6 +1,6 @@
 # Digital ToDo Tracker
 
-This World’s Simplest ToDo application allows you to track what needs to be done today.
+This World’s Simplest ToDo application allows you to organize your day.
 
 Track your day [here](https://naamnamm.github.io/todo-app/) 
 
