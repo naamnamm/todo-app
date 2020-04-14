@@ -1,55 +1,19 @@
 function addTask(e) {
   let keycode = e.key;
   if (keycode === 'Enter' && e.target.value.length > 1) {
-    //grab div
-    let maindiv = document.getElementById("main-div");
-    //add border
-    maindiv.style.border = '1px solid #dedcdc';
-
-    //grab ul
-    let ul = document.getElementById("task-list");
-
-    //create li = <li></li>
-    let li = document.createElement('li');
-    li.className = 'li-styling';
-    ul.appendChild(li);
-    
-    //create checkbox = <input type='checkbox'>
-    let checkbox = document.createElement('input'); 
-    checkbox.setAttribute("type", "checkbox");
-    checkbox.setAttribute("name", "checked");
-    checkbox.className = 'clear-task';
-    li.appendChild(checkbox);
-
-    //create label = <label>
-    let label = document.createElement('label');
-    label.textContent = e.target.value;
-    label.className = 'label-styling';
-    li.appendChild(label);
-
-    //create button = <button></button>
-    let deletebtn = document.createElement('button');
-    deletebtn.className = 'delete-task';
-    li.appendChild(deletebtn);
-    deletebtn.appendChild(document.createTextNode('x'))
-
-    //get update list every time new task added
-    let tasks = JSON.parse(localStorage.getItem('task-listing')) || [];
-
     const task = {
       text: e.target.value,
       isCompleted: false
     }
 
+    renderTask(task);
+
+    let tasks = JSON.parse(localStorage.getItem('task-listing')) || [];
+    
     tasks.push(task);
      
-    //save or update tasks to local storage
     localStorage.setItem('task-listing', JSON.stringify(tasks));
-    
-    // saved is now an object. // saved is just to see what's saved on local storage.
-    let saved = JSON.parse(JSON.stringify(tasks));
 
-    //once entered - set input value to ''
     e.target.value = '';
   }
 }
@@ -57,47 +21,51 @@ function addTask(e) {
 let newTask = document.getElementById("input-entered"); 
 newTask.addEventListener('keypress', addTask);
 
+
 const saved = JSON.parse(localStorage.getItem('task-listing'));
 saved.forEach(addLiToSavedTask);
 
 function addLiToSavedTask(task) {
-  if (saved.length >= 1) {
-    //grab maindiv
-    let maindiv = document.getElementById("main-div");
-    maindiv.style.border = '1px solid #dedcdc';
-
-    //grab ul
-    let ul = document.getElementById("task-list");
-
-    //create li = <li>
-    let li = document.createElement('li');
-    li.className = 'li-styling';
-    ul.appendChild(li);
-    
-    //create checkbox = <input type='checkbox'>
-    let checkbox = document.createElement('input'); 
-    checkbox.setAttribute("type", "checkbox");
-    checkbox.setAttribute("name", "checked");
-    checkbox.className = 'clearTask';
-    checkbox.checked = task.isCompleted;
-    li.appendChild(checkbox);
-
-    //create label = <label>
-    let label = document.createElement('label');
-    label.textContent = task.text;
-    label.className = 'label-styling';
-    li.appendChild(label);
-    if (task.isCompleted == true) {
-      label.style.textDecoration = 'line-through';
-    }
-
-    //create button = <button></button>
-    let deletebtn = document.createElement('button');
-    deletebtn.className = 'delete-task';
-    li.appendChild(deletebtn);
-    deletebtn.appendChild(document.createTextNode('x'))
-  }
+  if (saved.length >= 1) 
+    renderTask(task);
 }
+
+
+function renderTask(task) {
+  let maindiv = document.getElementById("main-div");
+  maindiv.style.border = '1px solid #dedcdc';
+
+  let ul = document.getElementById("task-list");
+
+  let li = document.createElement('li');
+  li.className = 'li-styling';
+  ul.appendChild(li);
+    
+  let checkbox = document.createElement('input'); 
+  checkbox.setAttribute("type", "checkbox");
+  checkbox.setAttribute("name", "checked");
+  checkbox.id = Math.floor(Math.random() * new Date().getTime());
+  checkbox.className = 'clear-task';
+  checkbox.checked = task.isCompleted;
+  li.appendChild(checkbox);
+  checkbox.addEventListener('change', clearTask);
+
+  let label = document.createElement('label');
+  label.textContent = task.text;
+  label.className = 'label-styling';
+  label.setAttribute('for', checkbox.id)
+  li.appendChild(label);
+  if (task.isCompleted == true) {
+    label.style.textDecoration = 'line-through';
+  }
+
+  let deletebtn = document.createElement('button');
+  deletebtn.className = 'delete-task';
+  li.appendChild(deletebtn);
+  deletebtn.appendChild(document.createTextNode('x'))
+  deletebtn.addEventListener('click', deleteTask)
+}
+
 
 function deleteTask(e) {
   if (e.target.classList.contains('delete-task')) {
@@ -109,19 +77,14 @@ function deleteTask(e) {
       e.target.parentElement.remove();
     };
     
-    //grab saved array
     const saved = JSON.parse(localStorage.getItem('task-listing'));
     
-    //remove item from saved array
     let updateTask = saved.filter(item => item.text !== e.target.parentElement.firstElementChild.nextElementSibling.innerHTML); 
 
-    //save update
     localStorage.setItem('task-listing', JSON.stringify(updateTask));
   }
 };
 
-let taskList = document.getElementById("task-list");
-taskList.addEventListener('click', deleteTask);
 
 function clearTask(e) {
   let checkbox = e.target;
@@ -142,7 +105,7 @@ function clearTask(e) {
   }
 }
 
-taskList.addEventListener('change', clearTask);
+
 
 
 
